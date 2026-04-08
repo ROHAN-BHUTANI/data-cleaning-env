@@ -5,11 +5,18 @@ from typing import Any, Callable, Dict
 
 import pandas as pd
 
-from graders.df_grader import DataFrameGrader
-from models import CleaningAction, Observation, Reward
-from tasks.easy import get_task as get_easy_task
-from tasks.hard import get_task as get_hard_task
-from tasks.medium import get_task as get_medium_task
+try:
+    from .graders.df_grader import DataFrameGrader
+    from .models import CleaningAction, Observation, Reward
+    from .tasks.easy import get_task as get_easy_task
+    from .tasks.hard import get_task as get_hard_task
+    from .tasks.medium import get_task as get_medium_task
+except ImportError:
+    from graders.df_grader import DataFrameGrader
+    from models import CleaningAction, Observation, Reward
+    from tasks.easy import get_task as get_easy_task
+    from tasks.hard import get_task as get_hard_task
+    from tasks.medium import get_task as get_medium_task
 
 
 class DataCleaningEnv:

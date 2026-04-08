@@ -44,5 +44,5 @@ reward:
   submit: f1_score_0_to_1
 
 docker:
-  context: ./server
+  context: .
   dockerfile: Dockerfile

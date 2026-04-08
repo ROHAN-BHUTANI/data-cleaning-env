@@ -4,8 +4,12 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 
-from env import DataCleaningEnv
-from models import CleaningAction, ResetRequest, ResetResponse, StateResponse, StepResponse
+try:
+    from .env import DataCleaningEnv
+    from .models import CleaningAction, ResetRequest, ResetResponse, StateResponse, StepResponse
+except ImportError:
+    from env import DataCleaningEnv
+    from models import CleaningAction, ResetRequest, ResetResponse, StateResponse, StepResponse
 
 
 app = FastAPI(title="DataCleaningEnv", version="1.0.0")
