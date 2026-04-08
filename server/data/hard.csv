@@ -1,0 +1,6 @@
+user_id,score,tenure_months,legacy_flag
+101.0,15,12,Y
+102.0,18,9,N
+103.0,999,3,Y
+104.0,-120,48,N
+105.0,22,6,Y

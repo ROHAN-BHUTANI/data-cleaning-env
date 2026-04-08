@@ -1,0 +1,5 @@
+customer_id,purchase_amount,segment
+1,0.3333333333,A
+2,1.0,B
+3,0.0,A
+4,0.6666666667,C

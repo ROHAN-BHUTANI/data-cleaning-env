@@ -1,0 +1,48 @@
+name: DataCleaningEnv
+version: 1.0.0
+description: OpenEnv environment for data cleaning with deterministic easy/medium/hard tasks.
+protocol: openenv/v1
+
+server:
+  framework: fastapi
+  host: 0.0.0.0
+  port: 8000
+  base_url: http://localhost:8000
+  endpoints:
+    reset:
+      method: GET
+      path: /reset
+    step:
+      method: POST
+      path: /step
+    state:
+      method: GET
+      path: /state
+
+action_space:
+  - drop_nulls
+  - fill_nulls
+  - drop_duplicates
+  - cast_column
+  - normalize
+  - clip_outliers
+  - submit
+
+observation_fields:
+  - shape
+  - columns
+  - dtypes
+  - null_counts
+  - sample_rows
+  - duplicate_count
+  - step_number
+  - last_error
+
+reward:
+  valid_action: 0.01
+  invalid_action: -0.05
+  submit: f1_score_0_to_1
+
+docker:
+  context: ./server
+  dockerfile: Dockerfile
