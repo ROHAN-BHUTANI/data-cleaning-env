@@ -1,0 +1,10 @@
+[project]
+name = "data-cleaning-env"
+version = "0.1.0"
+description = "OpenEnv DataCleaning Environment for RL agents"
+authors = [{ name = "Rohan Bhutani" }]
+readme = "README.md"
+requires-python = ">=3.10"
+
+[tool.openenv]
+entrypoint = "server.app:app"
