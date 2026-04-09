@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [project]
 name = "data-cleaning-env"
 version = "0.1.0"
@@ -8,3 +9,24 @@ requires-python = ">=3.10"
 
 [tool.openenv]
 entrypoint = "server.app:app"
+=======
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "datacleaningenv"
+version = "1.0.0"
+description = "OpenEnv DataCleaningEnv backend"
+requires-python = ">=3.11"
+dependencies = [
+  "openenv-core>=0.2.0",
+  "fastapi",
+  "uvicorn",
+  "pandas",
+  "pydantic",
+]
+
+[project.scripts]
+server = "server.app:main"
+>>>>>>> f2c202c (fix reset POST for openenv validator)

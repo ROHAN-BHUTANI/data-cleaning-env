@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
+import uvicorn
 from fastapi import FastAPI, HTTPException
 
 try:
@@ -60,3 +62,12 @@ def state() -> StateResponse:
 @app.post("/state", response_model=StateResponse)
 def state_post() -> StateResponse:
     return state()
+
+
+def main() -> None:
+    os.chdir(Path(__file__).resolve().parent)
+    uvicorn.run("app:app", host="0.0.0.0", port=8000)
+
+
+if __name__ == "__main__":
+    main()
