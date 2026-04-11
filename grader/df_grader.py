@@ -14,6 +14,11 @@ class GradeResult:
 class DataFrameGrader:
     _MISSING = "<MISSING>"
     _NA = "<NA>"
+    _EPS = 1e-6
+
+    @staticmethod
+    def _strict_unit_interval(value: float) -> float:
+        return max(DataFrameGrader._EPS, min(1.0 - DataFrameGrader._EPS, float(value)))
 
     @staticmethod
     def _normalize_series(series: pd.Series) -> pd.Series:
@@ -38,9 +43,9 @@ class DataFrameGrader:
     @staticmethod
     def column_wise_accuracy(pred: pd.DataFrame, truth: pd.DataFrame) -> float:
         if truth.empty:
-            return 0.0
+            return DataFrameGrader._EPS
         if pred.empty:
-            return 0.0
+            return DataFrameGrader._EPS
 
         per_column_scores = []
         for col in truth.columns:
@@ -49,14 +54,14 @@ class DataFrameGrader:
 
         schema_penalty = len(set(pred.columns).intersection(set(truth.columns))) / max(len(truth.columns), 1)
         score = (sum(per_column_scores) / len(per_column_scores)) * schema_penalty
-        return max(0.0, min(1.0, score))
+        return DataFrameGrader._strict_unit_interval(score)
 
     @staticmethod
     def f1_score(pred: pd.DataFrame, truth: pd.DataFrame) -> float:
         if truth.empty:
-            return 0.0
+            return DataFrameGrader._EPS
         if pred.empty:
-            return 0.0
+            return DataFrameGrader._EPS
 
         tp = 0
         total_pred = 0
@@ -71,14 +76,14 @@ class DataFrameGrader:
         precision = tp / max(total_pred, 1)
         recall = tp / max(total_truth, 1)
         if precision + recall == 0:
-            return 0.0
+            return DataFrameGrader._EPS
 
         schema_penalty = len(set(pred.columns).intersection(set(truth.columns))) / max(len(truth.columns), 1)
         f1 = (2 * precision * recall) / (precision + recall)
         f1 *= schema_penalty
         if pred.empty:
             f1 *= 0.1
-        return max(0.0, min(1.0, f1))
+        return DataFrameGrader._strict_unit_interval(f1)
 
     @staticmethod
     def grade(pred: pd.DataFrame, truth: pd.DataFrame) -> GradeResult:

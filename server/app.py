@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 import uvicorn
@@ -15,7 +14,7 @@ except ImportError:
 
 
 app = FastAPI(title="DataCleaningEnv", version="1.0.0")
-env = DataCleaningEnv(data_dir=Path(__file__).resolve().parent / "data")
+env = DataCleaningEnv(data_dir=Path(__file__).resolve().parent.parent / "data")
 
 
 @app.get("/health")
@@ -65,8 +64,7 @@ def state_post() -> StateResponse:
 
 
 def main() -> None:
-    os.chdir(Path(__file__).resolve().parent)
-    uvicorn.run("app:app", host="0.0.0.0", port=8000)
+    uvicorn.run("server.app:app", host="0.0.0.0", port=8000)
 
 
 if __name__ == "__main__":

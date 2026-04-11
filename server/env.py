@@ -5,27 +5,21 @@ from typing import Any, Callable, Dict
 
 import pandas as pd
 
+from grader.df_grader import DataFrameGrader
+
 try:
-    from .graders.df_grader import DataFrameGrader
     from .models import CleaningAction, Observation, Reward
-    from .tasks.easy import get_task as get_easy_task
-    from .tasks.hard import get_task as get_hard_task
-    from .tasks.medium import get_task as get_medium_task
 except ImportError:
-    from graders.df_grader import DataFrameGrader
     from models import CleaningAction, Observation, Reward
-    from tasks.easy import get_task as get_easy_task
-    from tasks.hard import get_task as get_hard_task
-    from tasks.medium import get_task as get_medium_task
 
 
 class DataCleaningEnv:
     def __init__(self, data_dir: Path) -> None:
         self.data_dir = data_dir
         self._task_loaders: Dict[str, Callable[[Path], dict]] = {
-            "easy": get_easy_task,
-            "medium": get_medium_task,
-            "hard": get_hard_task,
+            "easy": self._get_easy_task,
+            "medium": self._get_medium_task,
+            "hard": self._get_hard_task,
         }
         self.current_task_id: str | None = None
         self.current_df: pd.DataFrame | None = None
@@ -230,3 +224,30 @@ class DataCleaningEnv:
             upper = q3 + 1.5 * iqr
 
         self.current_df[column] = series.clip(lower=float(lower), upper=float(upper))
+
+    @staticmethod
+    def _get_easy_task(data_dir: Path) -> dict:
+        return {
+            "id": "easy",
+            "description": "Fix null values and type issues.",
+            "dirty_path": data_dir / "easy.csv",
+            "clean_path": data_dir / "easy_clean.csv",
+        }
+
+    @staticmethod
+    def _get_medium_task(data_dir: Path) -> dict:
+        return {
+            "id": "medium",
+            "description": "Remove duplicates and normalize numeric columns.",
+            "dirty_path": data_dir / "medium.csv",
+            "clean_path": data_dir / "medium_clean.csv",
+        }
+
+    @staticmethod
+    def _get_hard_task(data_dir: Path) -> dict:
+        return {
+            "id": "hard",
+            "description": "Resolve schema mismatch and clip outliers.",
+            "dirty_path": data_dir / "hard.csv",
+            "clean_path": data_dir / "hard_clean.csv",
+        }

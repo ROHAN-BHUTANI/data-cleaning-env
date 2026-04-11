@@ -75,13 +75,14 @@ def _heuristic_plan(task_id: str) -> List[Dict[str, Any]]:
 
 
 def main() -> int:
-    api_base_url = os.getenv("API_BASE_URL", "https://api.openai.com/v1")
     model_name = os.getenv("MODEL_NAME", "gpt-4o-mini")
-    hf_token = os.getenv("HF_TOKEN", "")
     env_base_url = os.getenv("ENV_BASE_URL", "http://localhost:8000")
     task_id = os.getenv("TASK_ID", "easy")
 
-    client = OpenAI(base_url=api_base_url, api_key=hf_token or "dummy-token")
+    os.environ.setdefault("API_BASE_URL", "https://api.openai.com/v1")
+    os.environ.setdefault("API_KEY", os.getenv("HF_TOKEN", "dummy-token"))
+
+    client = OpenAI(base_url=os.environ["API_BASE_URL"], api_key=os.environ["API_KEY"])
 
     print(f"[START] task={task_id} env_base_url={env_base_url} model={model_name}")
 
